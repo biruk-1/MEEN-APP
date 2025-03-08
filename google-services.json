@@ -1,0 +1,48 @@
+{
+    "project_info": {
+      "project_number": "153495487060",
+      "project_id": "menn-project",
+      "storage_bucket": "menn-project.firebasestorage.app"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:153495487060:android:4f30cdd82fbe32ea4823c1",
+          "android_client_info": {
+            "package_name": "com.myMENN.mycode"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyD7OnrtJQYIAkKDJ_X-vqXiInzmA7F0pS4"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      },
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:153495487060:android:057f6c40c57aa6f94823c1",
+          "android_client_info": {
+            "package_name": "com.myMenn.code"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyD7OnrtJQYIAkKDJ_X-vqXiInzmA7F0pS4"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
