@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -20,21 +19,22 @@
     "ios": {
       "supportsTablet": true
     },
-"android": {
-  "adaptiveIcon": {
-    "foregroundImage": "./assets/adaptive-icon.png",
-    "backgroundColor": "#FFFFFF"
-  },
-  "package": "com.mennapp",
-  "googleServicesFile": "./android/google-services.json"
-},
-"web": {
-  "favicon": "./assets/favicon.png"
-},
-"plugins": [
-  "@react-native-firebase/app",
-  "@react-native-firebase/messaging"
-]
-
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ],
+      "package": "com.biruk123.mennapp"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "newArchEnabled": true
   }
 }

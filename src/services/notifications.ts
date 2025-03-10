@@ -65,60 +65,22 @@
 //   }
 // });
 
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
-import * as Linking from 'expo-linking';
+import { PrismaClient } from "@prisma/client";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
+const prisma = new PrismaClient();
 
-export const registerForPushNotificationsAsync = async () => {
-  if (!Device.isDevice) {
-    console.log('Must use physical device for Push Notifications');
-    return null;
+export default async function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
-
-  const { status } = await Notifications.requestPermissionsAsync();
-  if (status !== 'granted') {
-    console.log('Failed to get push token: Permission denied');
-    return null;
-  }
-
-  const projectId = 'menn-project'; // Your Firebase project ID
-  const token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
-  console.log('Expo Push Token:', token);
-  return token; // Returns full Expo token (e.g., ExponentPushToken[abc123...])
-};
-
-export const sendPushNotification = async (title: string, body: string, token: string) => {
-  const message = {
-    to: token,
-    sound: 'default',
-    title,
-    body,
-    data: { url: 'mennapp://' },
-  };
 
   try {
-    await Notifications.scheduleNotificationAsync({
-      content: message,
-      trigger: null, // Send immediately (local notification for testing)
+    const notifications = await prisma.notification.findMany({
+      orderBy: { createdAt: 'desc' },
     });
-    console.log('Local notification scheduled');
+    res.status(200).json(notifications);
   } catch (error) {
-    console.error('Error sending local notification:', error);
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ message: "Failed to fetch notifications" });
   }
-};
-
-Notifications.addNotificationResponseReceivedListener(response => {
-  const url = response.notification.request.content.data.url;
-  if (url) {
-    console.log('Opening URL:', url);
-    Linking.openURL(url);
-  }
-});
+}
