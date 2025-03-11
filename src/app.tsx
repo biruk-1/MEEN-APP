@@ -1,243 +1,15 @@
-// // import React, { useEffect } from "react";
-// // import { NavigationContainer, LinkingOptions } from "@react-navigation/native";
-// // import { createStackNavigator } from "@react-navigation/stack";
-// // import * as Notifications from "expo-notifications";
-// // import * as Device from "expo-device";
-// // import { Platform } from "react-native";
-// // import HomeScreen from "./screens/HomeScreen";
-// // import UserScreen from "./components/UserScreen";
-
-// // export type RootStackParamList = {
-// //   Home: undefined;
-// //   User: { name: string };
-// // };
-
-// // const Stack = createStackNavigator<RootStackParamList>();
-
-// // const API_BASE_URL = "http://192.168.88.139:3000"; // Replace with ngrok URL if needed
-
-// // const linking: LinkingOptions<RootStackParamList> = {
-// //   prefixes: ["mennapp://"],
-// //   config: {
-// //     screens: {
-// //       Home: "home",
-// //       User: "user/:name",
-// //     },
-// //   },
-// // };
-
-// // async function registerForPushNotificationsAsync() {
-// //   let token;
-// //   if (Device.isDevice) {
-// //     const { status: existingStatus } = await Notifications.getPermissionsAsync();
-// //     let finalStatus = existingStatus;
-// //     if (existingStatus !== "granted") {
-// //       const { status } = await Notifications.requestPermissionsAsync();
-// //       finalStatus = status;
-// //     }
-// //     if (finalStatus !== "granted") {
-// //       console.log("Failed to get push token!");
-// //       return;
-// //     }
-// //     token = (await Notifications.getExpoPushTokenAsync()).data;
-// //     console.log("Expo Push Token:", token);
-
-// //     await fetch(`${API_BASE_URL}/api/register-token`, {
-// //       method: "POST",
-// //       headers: { "Content-Type": "application/json" },
-// //       body: JSON.stringify({ token }),
-// //     });
-// //   } else {
-// //     console.log("Must use physical device for Push Notifications");
-// //   }
-
-// //   if (Platform.OS === "android") {
-// //     Notifications.setNotificationChannelAsync("default", {
-// //       name: "default",
-// //       importance: Notifications.AndroidImportance.MAX,
-// //       vibrationPattern: [0, 250, 250, 250],
-// //       lightColor: "#FF231F7C",
-// //     });
-// //   }
-
-// //   return token;
-// // }
-
-// // export default function App() {
-// //   useEffect(() => {
-// //     registerForPushNotificationsAsync().then((token) =>
-// //       console.log("Push token registered:", token)
-// //     );
-
-// //     const subscription = Notifications.addNotificationReceivedListener((notification) => {
-// //       console.log("Notification received:", notification);
-// //     });
-
-// //     const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
-// //       console.log("Notification tapped:", response);
-// //     });
-
-// //     return () => {
-// //       subscription.remove();
-// //       responseSubscription.remove();
-// //     };
-// //   }, []);
-
-// //   return (
-// //     <NavigationContainer linking={linking}>
-// //       <Stack.Navigator initialRouteName="Home">
-// //         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "MennApp Home" }} />
-// //         <Stack.Screen name="User" component={UserScreen} options={({ route }) => ({ title: route.params.name })} />
-// //       </Stack.Navigator>
-// //     </NavigationContainer>
-// //   );
-// // }
-
-// import React, { useEffect } from "react";
-// import { NavigationContainer, LinkingOptions } from "@react-navigation/native";
-// import { createStackNavigator } from "@react-navigation/stack";
-// import * as Notifications from "expo-notifications";
-// import * as Device from "expo-device";
-// import { Platform } from "react-native";
-// import HomeScreen from "./screens/HomeScreen";
-// import UserScreen from "./components/UserScreen";
-
-// // Firebase setup
-// import { getMessaging, getToken } from "firebase/messaging";
-// import { initializeApp } from "firebase/app";
-
-// // Your Firebase config (replace with your actual values)
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDs0JYE2iHpXQRSjvg_FavpghvysJgIEuU",
-//   authDomain: "menn-project.firebaseapp.com",
-//   projectId: "menn-project",
-//   storageBucket: "menn-project.firebasestorage.app",
-//   messagingSenderId: "153495487060",
-//   appId: "1:153495487060:web:134cda431a6d18a34823c1",
-//   measurementId: "G-WPVEVKHRBN",
-// };
-
-// initializeApp(firebaseConfig);
-
-// export type RootStackParamList = {
-//   Home: undefined;
-//   User: { name: string };
-// };
-
-// const Stack = createStackNavigator<RootStackParamList>();
-
-// const API_BASE_URL = "http://192.168.64.139:3000"; // Replace with ngrok URL if needed
-
-// const linking: LinkingOptions<RootStackParamList> = {
-//   prefixes: ["mennapp://"],
-//   config: {
-//     screens: {
-//       Home: "home",
-//       User: "user/:name",
-//     },
-//   },
-// };
-
-// async function registerForPushNotificationsAsync() {
-//   let token;
-
-//   // Check if the device is physical, otherwise return early
-//   if (Device.isDevice) {
-//     const { status: existingStatus } = await Notifications.getPermissionsAsync();
-//     let finalStatus = existingStatus;
-
-//     // If permission not granted, ask the user for permission
-//     if (existingStatus !== "granted") {
-//       const { status } = await Notifications.requestPermissionsAsync();
-//       finalStatus = status;
-//     }
-
-//     if (finalStatus !== "granted") {
-//       console.log("Failed to get push token!");
-//       return;
-//     }
-
-//     // Register the device for push notifications using Expo
-//     token = (await Notifications.getExpoPushTokenAsync()).data;
-//     console.log("Expo Push Token:", token);
-
-//     // Send the token to your backend to store it and associate with the user
-//     await fetch(`${API_BASE_URL}/api/register-token`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ token }),
-//     });
-
-//     // Fetch the FCM token using Firebase SDK
-//     const messaging = getMessaging();
-//     const fcmToken = await getToken(messaging, { vapidKey: "YOUR_VAPID_KEY" });
-
-//     if (fcmToken) {
-//       console.log("Firebase Cloud Messaging Token:", fcmToken);
-//     } else {
-//       console.log("Failed to get FCM token");
-//     }
-
-//   } else {
-//     console.log("Must use physical device for Push Notifications");
-//   }
-
-//   // Set notification channel for Android
-//   if (Platform.OS === "android") {
-//     Notifications.setNotificationChannelAsync("default", {
-//       name: "default",
-//       importance: Notifications.AndroidImportance.MAX,
-//       vibrationPattern: [0, 250, 250, 250],
-//       lightColor: "#FF231F7C",
-//     });
-//   }
-
-//   return token;
-// }
-
-// export default function App() {
-//   useEffect(() => {
-//     registerForPushNotificationsAsync().then((token) =>
-//       console.log("Push token registered:", token)
-//     );
-
-//     const subscription = Notifications.addNotificationReceivedListener((notification) => {
-//       console.log("Notification received:", notification);
-//     });
-
-//     const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
-//       console.log("Notification tapped:", response);
-//     });
-
-//     return () => {
-//       subscription.remove();
-//       responseSubscription.remove();
-//     };
-//   }, []);
-
-//   return (
-//     <NavigationContainer linking={linking}>
-//       <Stack.Navigator initialRouteName="Home">
-//         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "MennApp Home" }} />
-//         <Stack.Screen name="User" component={UserScreen} options={({ route }) => ({ title: route.params.name })} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
-
-
-import React from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import { NavigationContainer, LinkingOptions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import UserScreen from "./components/UserScreen";
-import registerNNPushToken from 'native-notify'; // Corrected import
+import registerNNPushToken from "native-notify"; // Corrected import
 
 // Firebase setup
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 
 // Your Firebase config (replace with your actual values)
@@ -251,8 +23,11 @@ const firebaseConfig = {
   measurementId: "G-WPVEVKHRBN",
 };
 
-initializeApp(firebaseConfig);
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const messaging = getMessaging(firebaseApp);
 
+// Define navigation stack
 export type RootStackParamList = {
   Home: undefined;
   User: { name: string };
@@ -270,9 +45,76 @@ const linking: LinkingOptions<RootStackParamList> = {
   },
 };
 
+export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const notificationListener = useRef<any>();
+  const responseListener = useRef<any>();
+
+  useEffect(() => {
+    // Register for Expo push notifications
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) setExpoPushToken(token);
+    });
+
+    // Fetch Firebase Cloud Messaging Token
+    getToken(messaging, { vapidKey: "YOUR_VAPID_KEY" })
+      .then((token) => {
+        if (token) {
+          console.log("FCM Token:", token);
+          setFcmToken(token);
+        } else {
+          console.log("Failed to get FCM token");
+        }
+      })
+      .catch((err) => console.error("FCM Token Error:", err));
+
+    // Listen for incoming foreground notifications
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("Received Notification:", notification);
+      }
+    );
+
+    // Handle notification interactions (when tapped)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("User tapped on notification:", response);
+        const { name } = response.notification.request.content.data || {};
+        if (name) {
+          // Navigate to the corresponding screen
+          console.log("Navigating to user:", name);
+          Linking.openURL(`mennapp://user/${name}`);
+        }
+      }
+    );
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  // Register Native Notify Push Token (if needed)
+  registerNNPushToken(28141, "ZuM0PDgb6f28h3mcubONTD");
+
+  return (
+    <NavigationContainer linking={linking}>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: "MennApp Home" }} />
+        <Stack.Screen
+          name="User"
+          component={UserScreen}
+          options={({ route }) => ({ title: route.params.name })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// Request push notification permissions and get Expo Push Token
 async function registerForPushNotificationsAsync() {
   let token;
-
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -283,29 +125,18 @@ async function registerForPushNotificationsAsync() {
     }
 
     if (finalStatus !== "granted") {
-      console.log("Failed to get push token!");
-      return;
+      Alert.alert("Failed to get push token for push notifications!");
+      return null;
     }
 
-    // Register Expo push token
     token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log("Expo Push Token:", token);
-
-    // Fetch the FCM token
-    const messaging = getMessaging();
-    const fcmToken = await getToken(messaging, { vapidKey: "YOUR_VAPID_KEY" });
-
-    if (fcmToken) {
-      console.log("Firebase Cloud Messaging Token:", fcmToken);
-    } else {
-      console.log("Failed to get FCM token");
-    }
   } else {
-    console.log("Must use physical device for Push Notifications");
+    Alert.alert("Must use physical device for push notifications!");
   }
 
   if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
+    await Notifications.setNotificationChannelAsync("default", {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
@@ -316,16 +147,108 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
-export default function App() {
-  // Register Native Notify Push Token outside of useEffect
-  registerNNPushToken(28141, 'ZuM0PDgb6f28h3mcubONTD'); // Replace with your actual App ID and Token
 
-  return (
-    <NavigationContainer linking={linking}>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: "MennApp Home" }} />
-        <Stack.Screen name="User" component={UserScreen} options={({ route }) => ({ title: route.params.name })} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+
+// import React from 'react';
+// import { NavigationContainer, LinkingOptions } from "@react-navigation/native";
+// import { createStackNavigator } from "@react-navigation/stack";
+// import * as Notifications from "expo-notifications";
+// import * as Device from "expo-device";
+// import { Platform } from "react-native";
+// import HomeScreen from "./screens/HomeScreen";
+// import UserScreen from "./components/UserScreen";
+// import registerNNPushToken from 'native-notify'; // Corrected import
+
+// // Firebase setup
+// import { getMessaging, getToken } from "firebase/messaging";
+// import { initializeApp } from "firebase/app";
+
+// // Your Firebase config (replace with your actual values)
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDs0JYE2iHpXQRSjvg_FavpghvysJgIEuU",
+//   authDomain: "menn-project.firebaseapp.com",
+//   projectId: "menn-project",
+//   storageBucket: "menn-project.appspot.com",
+//   messagingSenderId: "153495487060",
+//   appId: "1:153495487060:web:134cda431a6d18a34823c1",
+//   measurementId: "G-WPVEVKHRBN",
+// };
+
+// initializeApp(firebaseConfig);
+
+// export type RootStackParamList = {
+//   Home: undefined;
+//   User: { name: string };
+// };
+
+// const Stack = createStackNavigator<RootStackParamList>();
+
+// const linking: LinkingOptions<RootStackParamList> = {
+//   prefixes: ["mennapp://"],
+//   config: {
+//     screens: {
+//       Home: "home",
+//       User: "user/:name",
+//     },
+//   },
+// };
+
+// async function registerForPushNotificationsAsync() {
+//   let token;
+
+//   if (Device.isDevice) {
+//     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+//     let finalStatus = existingStatus;
+
+//     if (existingStatus !== "granted") {
+//       const { status } = await Notifications.requestPermissionsAsync();
+//       finalStatus = status;
+//     }
+
+//     if (finalStatus !== "granted") {
+//       console.log("Failed to get push token!");
+//       return;
+//     }
+
+//     // Register Expo push token
+//     token = (await Notifications.getExpoPushTokenAsync()).data;
+//     console.log("Expo Push Token:", token);
+
+//     // Fetch the FCM token
+//     const messaging = getMessaging();
+//     const fcmToken = await getToken(messaging, { vapidKey: "YOUR_VAPID_KEY" });
+
+//     if (fcmToken) {
+//       console.log("Firebase Cloud Messaging Token:", fcmToken);
+//     } else {
+//       console.log("Failed to get FCM token");
+//     }
+//   } else {
+//     console.log("Must use physical device for Push Notifications");
+//   }
+
+//   if (Platform.OS === "android") {
+//     Notifications.setNotificationChannelAsync("default", {
+//       name: "default",
+//       importance: Notifications.AndroidImportance.MAX,
+//       vibrationPattern: [0, 250, 250, 250],
+//       lightColor: "#FF231F7C",
+//     });
+//   }
+
+//   return token;
+// }
+
+// export default function App() {
+//   // Register Native Notify Push Token outside of useEffect
+//   registerNNPushToken(28141, 'ZuM0PDgb6f28h3mcubONTD'); // Replace with your actual App ID and Token
+
+//   return (
+//     <NavigationContainer linking={linking}>
+//       <Stack.Navigator initialRouteName="Home">
+//         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "MennApp Home" }} />
+//         <Stack.Screen name="User" component={UserScreen} options={({ route }) => ({ title: route.params.name })} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }

@@ -110,7 +110,7 @@ const UserScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, {name}! 🎉</Text>
       <TouchableOpacity style={styles.button} onPress={handleSendNotification}>
-        <Text style={styles.buttonText}>📩 Send Notification to Everyone</Text>
+        <Text style={styles.buttonText}>📩 Send Notification </Text>
       </TouchableOpacity>
     </View>
   );
