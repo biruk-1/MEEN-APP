@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.biruk123.mennapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +36,12 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "add96523-c349-4556-b52c-319b5c896174"
+      }
+    },
+    "owner": "biruk123"
   }
 }
