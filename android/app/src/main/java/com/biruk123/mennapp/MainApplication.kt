@@ -14,7 +14,8 @@ import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 
 import expo.modules.ApplicationLifecycleDispatcher
-import expo.modules.ReactNativeHostWrapper
+import expo.modules.ReactNativeHostWrapper  
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
 class MainApplication : Application(), ReactApplication {
 

@@ -24,13 +24,12 @@
       }
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [
-        "RECEIVE_BOOT_COMPLETED",
-        "VIBRATE",
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE"
       ],
@@ -39,7 +38,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "newArchEnabled": true,
+    "plugins": [
+    ],
+    "newArchEnabled": false,
     "extra": {
       "eas": {
         "projectId": "add96523-c349-4556-b52c-319b5c896174"

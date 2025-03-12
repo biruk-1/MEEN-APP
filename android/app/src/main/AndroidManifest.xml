@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.biruk123.mennapp"/>
+        <data android:scheme="exp+mennapp"/>
       </intent-filter>
     </activity>
   </application>
